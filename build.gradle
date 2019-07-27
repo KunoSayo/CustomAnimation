@@ -1,13 +1,3 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
-    dependencies {
-        classpath 'org.ajoberstar:grgit:1.7.0'
-    }
-}
-
 plugins {
     id 'ninja.miserable.blossom' version '1.0.1'
     id 'com.github.johnrengelman.shadow' version '2.0.4'
@@ -16,6 +6,7 @@ sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 defaultTasks 'clean', 'build'
 group = 'com.github.euonmyoji.customanimation'
+jar.setEnabled(false)
 repositories {
     mavenCentral()
     maven {
@@ -31,4 +22,3 @@ tasks.withType(JavaCompile) {
 
 dependencies {
 }
-jar.setEnabled(false)

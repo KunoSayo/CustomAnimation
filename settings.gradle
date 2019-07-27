@@ -1,4 +1,4 @@
-rootProject.name = 'CustomAnimation'
+rootProject.name = name
 include 'CustomAnimation-Common'
 include 'CustomAnimation-Sponge'
 
