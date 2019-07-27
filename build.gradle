@@ -1,0 +1,34 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.ajoberstar:grgit:1.7.0'
+    }
+}
+
+plugins {
+    id 'ninja.miserable.blossom' version '1.0.1'
+    id 'com.github.johnrengelman.shadow' version '2.0.4'
+}
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+defaultTasks 'clean', 'build'
+group = 'com.github.euonmyoji.customanimation'
+repositories {
+    mavenCentral()
+    maven {
+        name = 'sponge'
+        url = 'https://repo.spongepowered.org/maven'
+    }
+    maven { url = 'https://jitpack.io' }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+dependencies {
+}
+jar.setEnabled(false)
