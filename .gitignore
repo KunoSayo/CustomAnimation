@@ -1,0 +1,14 @@
+.idea
+.gradle
+out
+build
+gradlew
+gradlew.bat
+gradle
+
+#for somebody who use **
+.vs
+
+
+#for code open only
+**/*.gradle
