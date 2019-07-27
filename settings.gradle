@@ -1,0 +1,4 @@
+rootProject.name = 'CustomAnimation'
+include 'CustomAnimation-Common'
+include 'CustomAnimation-Sponge'
+

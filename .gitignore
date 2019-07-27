@@ -11,4 +11,4 @@ gradle
 
 
 #for code open only
-**/*.gradle
+**/build.gradle
