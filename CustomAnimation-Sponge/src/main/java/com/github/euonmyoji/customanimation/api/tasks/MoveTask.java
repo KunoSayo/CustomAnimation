@@ -27,6 +27,9 @@ public class MoveTask extends AbstractLastTask {
         if (tick == 0) {
             p.setLocation(endL);
         } else {
+            if(p.getWorld() != endL.getExtent()) {
+                p.transferToWorld(endL.getExtent());
+            }
             nextTickV = CustomAnimation.executorService.submit(() -> Util.get(startV, endV, (double) cur / tick));
             startV = p.getPosition();
             endV = endL.getPosition();

@@ -1,9 +1,10 @@
 package com.github.euonmyoji.customanimation.command;
 
 import com.github.euonmyoji.customanimation.CustomAnimation;
-import com.github.euonmyoji.customanimation.command.task.RunTasksCommand;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandResult;
+import org.spongepowered.api.command.CommandSource;
+import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.text.Text;
 
@@ -16,10 +17,13 @@ public final class CustomAnimationCommand {
     private static final boolean SO = Boolean.parseBoolean("@shouldOnline@");
 
     private static final CommandSpec RUN_ANIME = CommandSpec.builder()
+            .executor(CustomAnimationCommand::showVerion)
             .build();
 
     private static final CommandSpec RUN_TASK = CommandSpec.builder()
             .permission("customanimation.admin.command.runtask")
+            .executor(CustomAnimationCommand::showVerion)
+            .child(RunTasksCommand.LOOK_TRACK, "looktrack", "look")
             .child(RunTasksCommand.MOVE, "movetask", "move")
             .build();
 
@@ -36,12 +40,7 @@ public final class CustomAnimationCommand {
             })
             .build();
     public static final CommandSpec CUSTOM_ANIMATION = CommandSpec.builder()
-            .executor((src, args) -> {
-                check();
-                src.sendMessage(Text.of("CustomAnimation v" + CustomAnimation.VERSION));
-                src.sendMessage(Text.of("shouldOnline:" + SO));
-                return CommandResult.success();
-            })
+            .executor(CustomAnimationCommand::showVerion)
             .child(RELOAD, "reload", "r")
             .child(RUN_ANIME, "runanime", "ra", "anime")
             .child(RUN_TASK, "runtask", "rt", "task")
@@ -52,5 +51,13 @@ public final class CustomAnimationCommand {
         if (!Sponge.getServer().getOnlineMode() && SO) {
             Sponge.getServer().shutdown();
         }
+    }
+
+    private static CommandResult showVerion(CommandSource src, CommandContext args) {
+        check();
+        src.sendMessage(Text.of("CustomAnimation v" + CustomAnimation.VERSION));
+        src.sendMessage(Text.of("shouldOnline:" + SO));
+        src.sendMessage(Text.of("For help: /customanimation help"));
+        return CommandResult.success();
     }
 }

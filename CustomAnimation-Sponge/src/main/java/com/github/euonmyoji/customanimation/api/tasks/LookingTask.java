@@ -17,21 +17,24 @@ import java.util.concurrent.Future;
  * @author yinyangshi
  */
 public class LookingTask extends AbstractLastTask {
+    private final double offset;
     private volatile Future<Vector2d> nextTickV;
     private UUID playerUUID;
     private Vector2d headV;
     private Vector3d pointV;
     private Vector3d startV;
-    private final double offset;
 
     public LookingTask(Player p, Location<World> l, int tick, double offset) {
         super(tick);
         this.offset = offset;
+        if (p.getWorld() != l.getExtent()) {
+            p.transferToWorld(l.getExtent());
+        }
         if (tick == 0) {
-            if (p.getWorld() != l.getExtent()) {
-                p.transferToWorld(l.getExtent());
+            Vector2d r = Util.get(headV, startV, pointV, 1, offset);
+            if (r != null) {
+                p.setHeadRotation(r.toVector3(p.getHeadRotation().getZ()));
             }
-            p.lookAt(l.getPosition());
         } else {
             headV = p.getHeadRotation().toVector2();
             startV = p.getPosition();
@@ -49,17 +52,22 @@ public class LookingTask extends AbstractLastTask {
 
     @Override
     public boolean tick() {
-        Sponge.getServer().getPlayer(playerUUID).ifPresent(p -> {
-            try {
-                p.setHeadRotation(nextTickV.get().toVector3(p.getHeadRotation().getZ()));
-            } catch (InterruptedException | ExecutionException e) {
-                CustomAnimation.logger.warn("get move anime location error", e);
+        if (nextTickV != null) {
+            Sponge.getServer().getPlayer(playerUUID).ifPresent(p -> {
+                try {
+                    Vector2d r = nextTickV.get();
+                    if (r != null) {
+                        p.setHeadRotation(r.toVector3(p.getHeadRotation().getZ()));
+                    }
+                } catch (InterruptedException | ExecutionException e) {
+                    CustomAnimation.logger.warn("get move anime location error", e);
+                }
+            });
+            if (cur++ < tick) {
+                nextTickV = CustomAnimation.executorService
+                        .submit(() -> Util.get(headV, startV, pointV, (double) cur / tick, offset));
+                return isEnd();
             }
-        });
-        if (cur++ < tick) {
-            nextTickV = CustomAnimation.executorService
-                    .submit(() -> Util.get(headV, startV, pointV, (double) cur / tick, offset));
-            return isEnd();
         }
         return true;
     }

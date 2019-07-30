@@ -65,7 +65,7 @@ public class CustomAnimation {
             PlaceHolderManager.getInstance();
             supportedPlaceholder = true;
         }
-        Task.builder().delayTicks(1).execute(ANIME_MANAGER::tick).submit(this);
+        Task.builder().delayTicks(20).intervalTicks(1).execute(ANIME_MANAGER::tick).submit(this);
         if (!Sponge.getServer().getOnlineMode() && Boolean.parseBoolean("@shouldOnline@")) {
             Sponge.getServer().shutdown();
         }

@@ -7,7 +7,8 @@ import com.flowpowered.math.vector.Vector3d;
  * @author yinyangshi
  */
 public class Util {
-    private static final double UNIT_RAD = 180 / Math.PI;
+    private static final double UNIT_ANGLE = 180 / Math.PI;
+    public static final double UNIT_RAD = Math.PI / 180;
 
     public static Vector3d get(Vector3d start, Vector3d end, double m) {
         if (m == 1) {
@@ -30,13 +31,13 @@ public class Util {
         Vector2d v1 = new Vector2d(distance, point.getY() - location.getY());
         Vector2d v2 = new Vector2d(distance, 0);
         //取符号 → 最后 (弧度转角 参考高中数学必修公式)
-        final double pitch = Math.acos(v1.dot(v2) / (v1.length() * v2.length())) * UNIT_RAD * (v1.getY() >= 0 ? -1 : 1) + offset;
+        final double pitch = Math.acos(v1.dot(v2) / (v1.length() * v2.length())) * UNIT_ANGLE * (v1.getY() >= 0 ? -1 : 1) + offset;
 
         //yaw
         //v1 为 看向的方向向量
         v1 = pointPos.sub(locPos);
         v2 = new Vector2d(0, v1.getY());
-        double yaw = Math.acos(v1.dot(v2) / (v1.length() * v2.length())) * UNIT_RAD;
+        double yaw = Math.acos(v1.dot(v2) / (v1.length() * v2.length())) * UNIT_ANGLE;
         if (v1.getX() < 0 && v1.getY() < 0) {
             yaw = 180 - yaw;
         } else if (v1.getX() > 0 && v1.getY() < 0) {

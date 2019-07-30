@@ -7,12 +7,13 @@ import com.github.euonmyoji.customanimation.configuration.PluginConfig;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author yinyangshi
  */
 public class AnimeManagerImpl implements AnimeManager {
-    private final HashMap<UUID, IAnimeTask> tasks = new HashMap<>();
+    private final ConcurrentHashMap<UUID, IAnimeTask> tasks = new ConcurrentHashMap<>();
 
     @Override
     public IAnimeTask getPlaying(UUID uuid) {
@@ -24,8 +25,7 @@ public class AnimeManagerImpl implements AnimeManager {
         if (tasks.containsKey(uuid)) {
             return false;
         }
-        tasks.put(uuid, task);
-        return true;
+        return tasks.put(uuid, task) == null;
     }
 
     @Override

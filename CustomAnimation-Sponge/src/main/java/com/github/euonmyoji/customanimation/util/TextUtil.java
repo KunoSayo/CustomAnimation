@@ -46,9 +46,11 @@ public class TextUtil {
             if (v.length > 1) {
                 Object[] objs = new Object[v.length * 2 - 1];
                 boolean r = true;
-                for (int i = 0; i < objs.length; ++i) {
+                for (int i = 0; i < objs.length; r = !r) {
                     objs[i] = r ? v[i] : "@s";
-                    r = !r;
+                    if(r) {
+                        ++i;
+                    }
                 }
                 return TextTemplate.of(TextTemplate.DEFAULT_OPEN_ARG, TextTemplate.DEFAULT_CLOSE_ARG, objs);
             } else {
