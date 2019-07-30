@@ -1,5 +1,7 @@
 package com.github.euonmyoji.customanimation.api;
 
+import com.github.euonmyoji.customanimation.api.tasks.IAnimeTask;
+
 import java.util.UUID;
 
 /**
@@ -25,4 +27,11 @@ public interface AnimeManager {
      * tick the anime task
      */
     void tick();
+
+    /**
+     * end a player's anime
+     * @param uuid the uuid of the player
+     * @return true if successful
+     */
+    boolean endAnime(UUID uuid);
 }

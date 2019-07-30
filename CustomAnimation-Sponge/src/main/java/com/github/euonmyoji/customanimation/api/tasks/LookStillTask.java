@@ -1,6 +1,4 @@
-package com.github.euonmyoji.customanimation.tasks;
-
-import com.github.euonmyoji.customanimation.api.IAnimeTask;
+package com.github.euonmyoji.customanimation.api.tasks;
 
 import java.util.UUID;
 
@@ -9,7 +7,7 @@ import java.util.UUID;
  */
 public class LookStillTask implements IAnimeTask {
     @Override
-    public boolean end() {
+    public boolean isEnd() {
         return false;
     }
 
@@ -19,7 +17,13 @@ public class LookStillTask implements IAnimeTask {
     }
 
     @Override
-    public void run() {
-
+    public boolean tick() {
+        return false;
     }
+
+    @Override
+    public boolean endAnime() {
+        return false;
+    }
+
 }

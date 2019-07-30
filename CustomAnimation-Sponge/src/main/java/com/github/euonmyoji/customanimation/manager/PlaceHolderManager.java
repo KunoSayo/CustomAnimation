@@ -1,16 +1,7 @@
 package com.github.euonmyoji.customanimation.manager;
 
-import com.github.euonmyoji.customanimation.util.Util;
 import me.rojo8399.placeholderapi.PlaceholderService;
-import me.rojo8399.placeholderapi.impl.utils.TextUtils;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.TextTemplate;
-
-import javax.annotation.Nullable;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author yinyangshi
@@ -28,29 +19,5 @@ public class PlaceHolderManager {
             instance = new PlaceHolderManager();
         }
         return instance;
-    }
-
-    public Text toText(String s, @Nullable Player p) {
-        if (s == null) {
-            return Text.EMPTY;
-        }
-        TextTemplate textTemplate = TextUtils.toTemplate(Util.toText(s), PlaceholderService.DEFAULT_PATTERN);
-        Map<String, ?> map = service.fillPlaceholders(textTemplate, p, p).entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, o -> {
-                    Object v = o.getValue();
-                    if (v != null) {
-                        if (v instanceof Number) {
-                            long i = ((Number) v).longValue();
-                            double d = ((Number) v).doubleValue();
-                            if ((double) i != d) {
-                                v = String.format("%.2f", ((Number) v).doubleValue());
-                            }
-                        }
-                    } else {
-                        v = o.getKey();
-                    }
-                    return v;
-                }));
-        return textTemplate.apply(map).build();
     }
 }

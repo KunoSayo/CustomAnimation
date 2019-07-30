@@ -1,4 +1,4 @@
-package com.github.euonmyoji.customanimation.api;
+package com.github.euonmyoji.customanimation.api.tasks;
 
 import java.util.UUID;
 
@@ -7,13 +7,13 @@ import java.util.UUID;
  * the task can contain child task(s)
  * @author yinyangshi
  */
-public interface IAnimeTask extends Runnable {
+public interface IAnimeTask {
     /**
      * if the anime is end
      *
      * @return true if end
      */
-    boolean end();
+    boolean isEnd();
 
     /**
      * get the uuid of the player playing
@@ -21,4 +21,17 @@ public interface IAnimeTask extends Runnable {
      * @return the uuid of the player
      */
     UUID getPlayer();
+
+    /**
+     * tick the anime
+     * if the anime is end, return true
+     * @return true if end
+     */
+    boolean tick();
+
+    /**
+     * end the anime
+     * @return true if successful
+     */
+    boolean endAnime();
 }

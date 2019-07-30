@@ -1,7 +1,7 @@
 package com.github.euonmyoji.customanimation.manager;
 
 import com.github.euonmyoji.customanimation.api.AnimeManager;
-import com.github.euonmyoji.customanimation.api.IAnimeTask;
+import com.github.euonmyoji.customanimation.api.tasks.IAnimeTask;
 import com.github.euonmyoji.customanimation.configuration.PluginConfig;
 
 import java.util.Collection;
@@ -32,9 +32,15 @@ public class AnimeManagerImpl implements AnimeManager {
     public void tick() {
         Collection<IAnimeTask> c = tasks.values();
         if (c.size() > PluginConfig.parallelGoal) {
-            c.parallelStream().forEach(IAnimeTask::run);
+            c.parallelStream().filter(IAnimeTask::tick).forEach(task -> tasks.remove(task.getPlayer()));
         } else {
-            c.forEach(IAnimeTask::run);
+            c.stream().filter(IAnimeTask::tick).forEach(task -> tasks.remove(task.getPlayer()));
         }
+    }
+
+    @Override
+    public boolean endAnime(UUID uuid) {
+        IAnimeTask task = tasks.get(uuid);
+        return task != null && task.endAnime() && tasks.remove(uuid, task);
     }
 }

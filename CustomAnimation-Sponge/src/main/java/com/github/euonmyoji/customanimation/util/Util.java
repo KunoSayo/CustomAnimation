@@ -2,18 +2,12 @@ package com.github.euonmyoji.customanimation.util;
 
 import com.flowpowered.math.vector.Vector2d;
 import com.flowpowered.math.vector.Vector3d;
-import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.serializer.TextSerializers;
 
 /**
  * @author yinyangshi
  */
 public class Util {
     private static final double UNIT_RAD = 180 / Math.PI;
-
-    public static Text toText(String s) {
-        return TextSerializers.FORMATTING_CODE.deserialize(s);
-    }
 
     public static Vector3d get(Vector3d start, Vector3d end, double m) {
         if (m == 1) {
@@ -22,7 +16,7 @@ public class Util {
         return start.add(end.sub(start).mul(m));
     }
 
-    public static Vector2d get(Vector2d start, Vector3d location, Vector3d point, double m) {
+    public static Vector2d get(Vector2d start, Vector3d location, Vector3d point, double m, double offset) {
         Vector2d locPos = location.toVector2(true);
         Vector2d pointPos = point.toVector2(true);
         double distance = locPos.distanceSquared(pointPos);
@@ -36,7 +30,7 @@ public class Util {
         Vector2d v1 = new Vector2d(distance, point.getY() - location.getY());
         Vector2d v2 = new Vector2d(distance, 0);
         //取符号 → 最后 (弧度转角 参考高中数学必修公式)
-        final double pitch = Math.acos(v1.dot(v2) / (v1.length() * v2.length())) * UNIT_RAD * (v1.getY() >= 0 ? -1 : 1);
+        final double pitch = Math.acos(v1.dot(v2) / (v1.length() * v2.length())) * UNIT_RAD * (v1.getY() >= 0 ? -1 : 1) + offset;
 
         //yaw
         //v1 为 看向的方向向量
