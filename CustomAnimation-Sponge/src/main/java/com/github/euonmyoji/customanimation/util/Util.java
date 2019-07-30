@@ -7,8 +7,8 @@ import com.flowpowered.math.vector.Vector3d;
  * @author yinyangshi
  */
 public class Util {
-    private static final double UNIT_ANGLE = 180 / Math.PI;
     public static final double UNIT_RAD = Math.PI / 180;
+    private static final double UNIT_ANGLE = 180 / Math.PI;
 
     public static Vector3d get(Vector3d start, Vector3d end, double m) {
         if (m == 1) {
@@ -18,7 +18,7 @@ public class Util {
     }
 
     public static Vector2d get(Vector2d start, Vector3d location, Vector3d point, double m, double offset) {
-        if(location == null) {
+        if (location == null) {
             return null;
         }
         Vector2d locPos = location.toVector2(true);
@@ -55,5 +55,9 @@ public class Util {
             Vector2d d = result.sub(start);
             return start.add(d.mul(m));
         }
+    }
+
+    private static void check(Vector2d v) {
+
     }
 }

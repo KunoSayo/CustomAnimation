@@ -29,7 +29,7 @@ final class RunTasksCommand {
             .executor((src, args) -> {
                 int tick = args.<Integer>getOne("tick").orElseThrow(NoSuchElementException::new);
                 Collection<Player> players = args.getAll("player");
-                Location<World> start = args.<Location<World>>getOne("end").orElseThrow(NoSuchElementException::new);
+                Location<World> start = args.<Location<World>>getOne("start").orElseThrow(NoSuchElementException::new);
                 Location<World> end = args.<Location<World>>getOne("end").orElseThrow(NoSuchElementException::new);
                 if (tick < 1) {
                     throw new CommandException(Text.of("The tick should be positive!"));
@@ -37,7 +37,7 @@ final class RunTasksCommand {
                 if (start.getExtent() != end.getExtent()) {
                     throw new CommandException(Text.of("The start point and end point is not the same world!"));
                 }
-                double offset = args.<Double>getOne("offset").orElseGet(() -> (double) 0);
+                double offset = args.<Double>getOne("offset").orElse(0.0);
                 if (offset != 0) {
                     if (offset % 180 == 0) {
                         offset = Math.PI * (offset / 180);

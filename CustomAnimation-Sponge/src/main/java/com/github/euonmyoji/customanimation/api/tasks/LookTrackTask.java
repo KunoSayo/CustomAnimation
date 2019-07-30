@@ -56,7 +56,11 @@ public class LookTrackTask extends AbstractLastTask {
             Player p = Sponge.getServer().getPlayer(playerUUID).orElse(null);
             if (p != null) {
                 try {
-                    p.setHeadRotation(nextTickV.get().toVector3(p.getHeadRotation().getZ()));
+                    Vector2d r = nextTickV.get();
+                    if(r != null) {
+                        p.setHeadRotation(r.toVector3(p.getHeadRotation().getZ()));
+                        p.setRotation(r.toVector3(p.getRotation().getZ()));
+                    }
                 } catch (InterruptedException | ExecutionException e) {
                     CustomAnimation.logger.warn("get move anime location error", e);
                 }
