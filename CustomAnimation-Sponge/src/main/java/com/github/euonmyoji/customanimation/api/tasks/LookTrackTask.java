@@ -29,10 +29,19 @@ public class LookTrackTask extends AbstractLastTask {
         if (p.getWorld() != start.getExtent()) {
             p.transferToWorld(start.getExtent());
         }
-        playerUUID = p.getUniqueId();
         this.headV = p.getHeadRotation().toVector2();
         pointStart = start.getPosition();
         pointEnd = end;
+        if (tick == 1) {
+            Vector2d r = Util.get(headV, p.getPosition(), Util.get(pointStart, pointEnd, (double) cur / tick), 1, offset);
+            if (r != null) {
+                p.setHeadRotation(r.toVector3(p.getHeadRotation().getZ()));
+            }
+        } else {
+            nextTickV = CustomAnimation.executorService
+                    .submit(() -> Util.get(headV, p.getPosition(), Util.get(pointStart, pointEnd, (double) cur / tick), 1, offset));
+        }
+        playerUUID = p.getUniqueId();
         this.offset = offset;
     }
 
@@ -55,7 +64,7 @@ public class LookTrackTask extends AbstractLastTask {
             if (cur++ < tick) {
                 if (p != null) {
                     nextTickV = CustomAnimation.executorService
-                            .submit(() -> Util.get(headV, p.getPosition(), Util.get(pointStart,pointEnd,(double) cur / tick), 1, offset));
+                            .submit(() -> Util.get(headV, p.getPosition(), Util.get(pointStart, pointEnd, (double) cur / tick), 1, offset));
                 }
                 return isEnd();
             }

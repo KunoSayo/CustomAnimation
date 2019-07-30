@@ -18,6 +18,9 @@ public class Util {
     }
 
     public static Vector2d get(Vector2d start, Vector3d location, Vector3d point, double m, double offset) {
+        if(location == null) {
+            return null;
+        }
         Vector2d locPos = location.toVector2(true);
         Vector2d pointPos = point.toVector2(true);
         double distance = locPos.distanceSquared(pointPos);
