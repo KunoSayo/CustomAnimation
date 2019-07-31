@@ -22,10 +22,12 @@ public class LookTrackTask extends AbstractLastTask {
     private final Vector3d pointStart;
     private final Vector3d pointEnd;
     private final double offset;
+    private final boolean useBig;
     private volatile Future<Vector2d> nextTickV;
 
-    public LookTrackTask(Player p, Location<World> start, Vector3d end, int tick, double offset) {
+    public LookTrackTask(Player p, Location<World> start, Vector3d end, int tick, double offset, boolean useBig) {
         super(tick);
+        this.useBig = useBig;
         if (p.getWorld() != start.getExtent()) {
             p.transferToWorld(start.getExtent());
         }
@@ -33,13 +35,13 @@ public class LookTrackTask extends AbstractLastTask {
         pointStart = start.getPosition();
         pointEnd = end;
         if (tick == 1) {
-            Vector2d r = Util.get(headV, p.getPosition(), Util.get(pointStart, pointEnd, (double) cur / tick), 1, offset);
+            Vector2d r = Util.get(headV, p.getPosition(), Util.get(pointStart, pointEnd, (double) cur / tick), 1, offset, useBig);
             if (r != null) {
                 p.setHeadRotation(r.toVector3(p.getHeadRotation().getZ()));
             }
         } else {
             nextTickV = CustomAnimation.executorService
-                    .submit(() -> Util.get(headV, p.getPosition(), Util.get(pointStart, pointEnd, (double) cur / tick), 1, offset));
+                    .submit(() -> Util.get(headV, p.getPosition(), Util.get(pointStart, pointEnd, (double) cur / tick), 1, offset, useBig));
         }
         playerUUID = p.getUniqueId();
         this.offset = offset;
@@ -57,7 +59,7 @@ public class LookTrackTask extends AbstractLastTask {
             if (p != null) {
                 try {
                     Vector2d r = nextTickV.get();
-                    if(r != null) {
+                    if (r != null) {
                         p.setHeadRotation(r.toVector3(p.getHeadRotation().getZ()));
                         p.setRotation(r.toVector3(p.getRotation().getZ()));
                     }
@@ -68,7 +70,7 @@ public class LookTrackTask extends AbstractLastTask {
             if (cur++ < tick) {
                 if (p != null) {
                     nextTickV = CustomAnimation.executorService
-                            .submit(() -> Util.get(headV, p.getPosition(), Util.get(pointStart, pointEnd, (double) cur / tick), 1, offset));
+                            .submit(() -> Util.get(headV, p.getPosition(), Util.get(pointStart, pointEnd, (double) cur / tick), 1, offset, useBig));
                 }
                 return isEnd();
             }

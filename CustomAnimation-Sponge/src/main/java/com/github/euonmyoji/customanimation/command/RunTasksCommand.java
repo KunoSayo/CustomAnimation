@@ -25,12 +25,14 @@ final class RunTasksCommand {
             .arguments(GenericArguments.player(Text.of("player")), GenericArguments.location(Text.of("start")),
                     GenericArguments.location(Text.of("end")),
                     GenericArguments.integer(Text.of("tick")),
-                    GenericArguments.optional(GenericArguments.doubleNum(Text.of("offset"))))
+                    GenericArguments.optional(GenericArguments.doubleNum(Text.of("offset"))),
+                    GenericArguments.optional(GenericArguments.bool(Text.of("useBig"))))
             .executor((src, args) -> {
                 int tick = args.<Integer>getOne("tick").orElseThrow(NoSuchElementException::new);
                 Collection<Player> players = args.getAll("player");
                 Location<World> start = args.<Location<World>>getOne("start").orElseThrow(NoSuchElementException::new);
                 Location<World> end = args.<Location<World>>getOne("end").orElseThrow(NoSuchElementException::new);
+                boolean useBig = args.<Boolean>getOne("useBig").orElse(false);
                 if (tick < 1) {
                     throw new CommandException(Text.of("The tick should be positive!"));
                 }
@@ -46,7 +48,7 @@ final class RunTasksCommand {
                     }
                 }
                 for (Player player : players) {
-                    if (CustomAnimation.ANIME_MANAGER.setTask(player.getUniqueId(), new LookTrackTask(player, start, end.getPosition(), tick, offset))) {
+                    if (CustomAnimation.ANIME_MANAGER.setTask(player.getUniqueId(), new LookTrackTask(player, start, end.getPosition(), tick, offset, useBig))) {
                         src.sendMessage(Text.of("Set player " + player.getName() + " anime task successful."));
                     } else {
                         src.sendMessage(Text.of("Set player " + player.getName() + " anime task failed!"));
