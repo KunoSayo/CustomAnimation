@@ -23,17 +23,15 @@ public class LookingTask extends AbstractLastTask {
     private Vector2d headV;
     private Vector3d pointV;
     private Vector3d startV;
-    private final boolean useBig;
 
-    public LookingTask(Player p, Location<World> l, int tick, double offset, boolean useBig) {
+    public LookingTask(Player p, Location<World> l, int tick, double offset) {
         super(tick);
-        this.useBig = useBig;
         this.offset = offset;
         if (p.getWorld() != l.getExtent()) {
             p.transferToWorld(l.getExtent());
         }
         if (tick == 0) {
-            Vector2d r = Util.get(headV, startV, pointV, 1, offset, useBig);
+            Vector2d r = Util.get(headV, startV, pointV, 1, offset);
             if (r != null) {
                 p.setHeadRotation(r.toVector3(p.getHeadRotation().getZ()));
             }
@@ -41,7 +39,7 @@ public class LookingTask extends AbstractLastTask {
             headV = p.getHeadRotation().toVector2();
             startV = p.getPosition();
             nextTickV = CustomAnimation.executorService
-                    .submit(() -> Util.get(headV, startV, l.getPosition(), (double) cur / tick, offset, useBig));
+                    .submit(() -> Util.get(headV, startV, l.getPosition(), (double) cur / tick, offset));
             pointV = l.getPosition();
         }
         playerUUID = p.getUniqueId();
@@ -67,7 +65,7 @@ public class LookingTask extends AbstractLastTask {
             });
             if (cur++ < tick) {
                 nextTickV = CustomAnimation.executorService
-                        .submit(() -> Util.get(headV, startV, pointV, (double) cur / tick, offset, useBig));
+                        .submit(() -> Util.get(headV, startV, pointV, (double) cur / tick, offset));
                 return isEnd();
             }
         }

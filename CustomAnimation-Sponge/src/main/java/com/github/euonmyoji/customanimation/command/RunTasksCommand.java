@@ -1,8 +1,9 @@
 package com.github.euonmyoji.customanimation.command;
 
 import com.github.euonmyoji.customanimation.CustomAnimation;
-import com.github.euonmyoji.customanimation.api.tasks.LookTrackTask;
 import com.github.euonmyoji.customanimation.api.tasks.MoveTask;
+import com.github.euonmyoji.customanimation.api.tasks.StillLookTrackTask;
+import com.github.euonmyoji.customanimation.util.TextUtil;
 import com.github.euonmyoji.customanimation.util.Util;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -20,19 +21,17 @@ import java.util.NoSuchElementException;
  * @author yinyangshi
  */
 final class RunTasksCommand {
-    static final CommandSpec LOOK_TRACK = CommandSpec.builder()
+    static final CommandSpec STILL_LOOK_TRACK = CommandSpec.builder()
             .permission("customanimation.admin.command.looktrack")
             .arguments(GenericArguments.player(Text.of("player")), GenericArguments.location(Text.of("start")),
                     GenericArguments.location(Text.of("end")),
                     GenericArguments.integer(Text.of("tick")),
-                    GenericArguments.optional(GenericArguments.doubleNum(Text.of("offset"))),
-                    GenericArguments.optional(GenericArguments.bool(Text.of("useBig"))))
+                    GenericArguments.optional(GenericArguments.doubleNum(Text.of("offset"))))
             .executor((src, args) -> {
                 int tick = args.<Integer>getOne("tick").orElseThrow(NoSuchElementException::new);
                 Collection<Player> players = args.getAll("player");
                 Location<World> start = args.<Location<World>>getOne("start").orElseThrow(NoSuchElementException::new);
                 Location<World> end = args.<Location<World>>getOne("end").orElseThrow(NoSuchElementException::new);
-                boolean useBig = args.<Boolean>getOne("useBig").orElse(false);
                 if (tick < 1) {
                     throw new CommandException(Text.of("The tick should be positive!"));
                 }
@@ -48,10 +47,12 @@ final class RunTasksCommand {
                     }
                 }
                 for (Player player : players) {
-                    if (CustomAnimation.ANIME_MANAGER.setTask(player.getUniqueId(), new LookTrackTask(player, start, end.getPosition(), tick, offset, useBig))) {
-                        src.sendMessage(Text.of("Set player " + player.getName() + " anime task successful."));
+                    if (CustomAnimation.ANIME_MANAGER.setTask(player.getUniqueId(), new StillLookTrackTask(player, start, end.getPosition(), tick, offset))) {
+                        src.sendMessage(TextUtil.toText(CustomAnimation.RAW_TEXT_MANAGER.get("customanimation.command.setPlayerTask.successful", src.getLocale())
+                                .replace("{player_name}", player.getName())));
                     } else {
-                        src.sendMessage(Text.of("Set player " + player.getName() + " anime task failed!"));
+                        src.sendMessage(TextUtil.toText(CustomAnimation.RAW_TEXT_MANAGER.get("customanimation.command.setPlayerTask.failed", src.getLocale())
+                                .replace("{player_name}", player.getName())));
                     }
                 }
                 return CommandResult.success();

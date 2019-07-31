@@ -1,0 +1,2 @@
+customanimation.command.setPlayerTask.successful=设置玩家{player_name}执行动画成功
+customanimation.command.setPlayerTask.failed=设置玩家{player_name}执行动画失败

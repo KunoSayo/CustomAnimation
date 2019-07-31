@@ -23,7 +23,7 @@ public final class CustomAnimationCommand {
     private static final CommandSpec RUN_TASK = CommandSpec.builder()
             .permission("customanimation.admin.command.runtask")
             .executor(CustomAnimationCommand::showVerion)
-            .child(RunTasksCommand.LOOK_TRACK, "looktrack", "look")
+            .child(RunTasksCommand.STILL_LOOK_TRACK, "stilllooktrack", "stilllook")
             .child(RunTasksCommand.MOVE, "movetask", "move")
             .build();
 

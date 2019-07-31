@@ -1,6 +1,9 @@
 package com.github.euonmyoji.customanimation.api.tasks;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.UUID;
 
 /**
  * @author yinyangshi
@@ -20,7 +23,7 @@ public class TaskGroup implements IAnimeTask {
         this.keyTasks = keyTasks;
         this.tick = tick;
         this.playerUUID = playerUUID;
-        if(curTick > tick[curTask]) {
+        if (curTick > tick[curTask]) {
             submitNew();
         }
     }
@@ -37,7 +40,7 @@ public class TaskGroup implements IAnimeTask {
 
     @Override
     public boolean tick() {
-        if(curTick++ > tick[curTask]) {
+        if (curTick++ > tick[curTask]) {
             submitNew();
         }
         executing.removeIf(IAnimeTask::tick);
@@ -46,7 +49,7 @@ public class TaskGroup implements IAnimeTask {
 
     @Override
     public boolean endAnime() {
-        if(isEnd()) {
+        if (isEnd()) {
             return false;
         }
         for (IAnimeTask iAnimeTask : executing) {
@@ -57,7 +60,7 @@ public class TaskGroup implements IAnimeTask {
     }
 
     private void submitNew() {
-        if(!keyTasks.isEmpty()) {
+        if (!keyTasks.isEmpty()) {
             executing.addAll(keyTasks.poll());
         }
         ++curTask;

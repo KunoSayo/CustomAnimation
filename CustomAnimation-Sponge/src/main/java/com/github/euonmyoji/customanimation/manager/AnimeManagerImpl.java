@@ -5,7 +5,6 @@ import com.github.euonmyoji.customanimation.api.tasks.IAnimeTask;
 import com.github.euonmyoji.customanimation.configuration.PluginConfig;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 

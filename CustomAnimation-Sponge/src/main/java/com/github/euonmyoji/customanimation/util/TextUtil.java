@@ -5,6 +5,7 @@ import com.github.euonmyoji.customanimation.manager.PlaceHolderManager;
 import me.rojo8399.placeholderapi.PlaceholderService;
 import me.rojo8399.placeholderapi.impl.utils.TextUtils;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.TextTemplate;
 
 import java.util.Collections;
@@ -48,7 +49,7 @@ public class TextUtil {
                 boolean r = true;
                 for (int i = 0; i < objs.length; r = !r) {
                     objs[i] = r ? v[i] : "@s";
-                    if(r) {
+                    if (r) {
                         ++i;
                     }
                 }
@@ -67,6 +68,10 @@ public class TextUtil {
         } else {
             return FORMATTING_CODE.serialize(textTemplate.apply(Collections.singletonMap("@s", p.getName())).build());
         }
+    }
+
+    public static Text toText(String s) {
+        return FORMATTING_CODE.deserialize(s);
     }
 
 }

@@ -17,15 +17,20 @@ public class Util {
         return start.add(end.sub(start).mul(m));
     }
 
+    public static Vector2d get(Vector2d start, Vector2d end, double m) {
+        if (m == 1) {
+            return end;
+        }
+        return start.add(end.sub(start).mul(m));
+    }
+
     /**
      * get the (pitch, yaw) in the minecraft unit
      * ^x (pitch = -90)
      * |
-     * |
      * |  .(z, x)
      * |
      * O------->z   (pitch = 0)
-     * |
      * |
      * |
      * |
@@ -36,16 +41,18 @@ public class Util {
      * @param point    the point you want to look
      * @param m        the state
      * @param offset   the angel offset for pitch
-     * @param big      use the big rad
      * @return (pitch, yaw)
      */
-    public static Vector2d get(Vector2d start, Vector3d location, Vector3d point, double m, double offset, boolean big) {
+    public static Vector2d get(Vector2d start, Vector3d location, Vector3d point, double m, double offset) {
         Vector3d seeV = point.sub(location);
         double pitch = 0;
         if (seeV.getX() == 0) {
             if (seeV.getZ() == 0) {
-                return null;
-                //no pitch way (
+                if (start == null) {
+                    return null;
+                } else {
+                    pitch = start.getX();
+                }
             } else if (seeV.getZ() < 0) {
                 pitch = 180;
             }
@@ -54,6 +61,9 @@ public class Util {
         } else {
             double xzL = seeV.toVector2(true).length();
             pitch = -Math.asin(seeV.getX() / xzL) * UNIT_ANGLE;
+            if (seeV.getZ() < 0) {
+                pitch += pitch > 0 ? 90 : -90;
+            }
         }
         double yaw = seeV.getY() == 0 ? 0 : -Math.asin(seeV.getY() / seeV.length());
         Vector2d result = new Vector2d(pitch + offset, yaw);

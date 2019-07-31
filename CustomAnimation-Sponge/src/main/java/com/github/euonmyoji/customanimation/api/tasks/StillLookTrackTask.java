@@ -16,35 +16,38 @@ import java.util.concurrent.Future;
 /**
  * @author yinyangshi
  */
-public class LookTrackTask extends AbstractLastTask {
+public class StillLookTrackTask extends AbstractLastTask {
     private final UUID playerUUID;
-    private final Vector2d headV;
-    private final Vector3d pointStart;
-    private final Vector3d pointEnd;
-    private final double offset;
-    private final boolean useBig;
+    private final Vector2d startLookV;
+    private Vector2d endLookV;
     private volatile Future<Vector2d> nextTickV;
 
-    public LookTrackTask(Player p, Location<World> start, Vector3d end, int tick, double offset, boolean useBig) {
+    public StillLookTrackTask(Player p, Location<World> start, Vector3d end, int tick, double offset) {
         super(tick);
-        this.useBig = useBig;
         if (p.getWorld() != start.getExtent()) {
             p.transferToWorld(start.getExtent());
         }
-        this.headV = p.getHeadRotation().toVector2();
-        pointStart = start.getPosition();
-        pointEnd = end;
         if (tick == 1) {
-            Vector2d r = Util.get(headV, p.getPosition(), Util.get(pointStart, pointEnd, (double) cur / tick), 1, offset, useBig);
+            Vector2d r = Util.get(null, p.getPosition(), end, 1, offset);
             if (r != null) {
                 p.setHeadRotation(r.toVector3(p.getHeadRotation().getZ()));
+                p.setRotation(r.toVector3(p.getRotation().getZ()));
             }
+            startLookV = null;
         } else {
+            startLookV = Util.get(null, p.getPosition(), start.getPosition(), 1, offset);
+            if (startLookV == null) {
+                throw new IllegalArgumentException("What's player's problem?");
+            }
+            p.setHeadRotation(startLookV.toVector3(p.getHeadRotation().getZ()));
+            p.setRotation(startLookV.toVector3(p.getRotation().getZ()));
             nextTickV = CustomAnimation.executorService
-                    .submit(() -> Util.get(headV, p.getPosition(), Util.get(pointStart, pointEnd, (double) cur / tick), 1, offset, useBig));
+                    .submit(() -> {
+                        endLookV = Util.get(null, p.getPosition(), end, 1, offset);
+                        return Util.get(startLookV, endLookV, (double) cur / tick);
+                    });
         }
         playerUUID = p.getUniqueId();
-        this.offset = offset;
     }
 
     @Override
@@ -68,10 +71,8 @@ public class LookTrackTask extends AbstractLastTask {
                 }
             }
             if (cur++ < tick) {
-                if (p != null) {
-                    nextTickV = CustomAnimation.executorService
-                            .submit(() -> Util.get(headV, p.getPosition(), Util.get(pointStart, pointEnd, (double) cur / tick), 1, offset, useBig));
-                }
+                nextTickV = CustomAnimation.executorService
+                        .submit(() -> Util.get(startLookV, endLookV, (double) cur / tick));
                 return isEnd();
             }
         }
