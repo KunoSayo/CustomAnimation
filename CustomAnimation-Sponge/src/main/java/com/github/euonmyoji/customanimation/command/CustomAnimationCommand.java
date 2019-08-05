@@ -17,12 +17,12 @@ public final class CustomAnimationCommand {
     private static final boolean SO = Boolean.parseBoolean("@shouldOnline@");
 
     private static final CommandSpec RUN_ANIME = CommandSpec.builder()
-            .executor(CustomAnimationCommand::showVerion)
+            .executor(CustomAnimationCommand::showVersion)
             .build();
 
     private static final CommandSpec RUN_TASK = CommandSpec.builder()
             .permission("customanimation.admin.command.runtask")
-            .executor(CustomAnimationCommand::showVerion)
+            .executor(CustomAnimationCommand::showVersion)
             .child(RunTasksCommand.STILL_LOOK_TRACK, "stilllooktrack", "stilllook")
             .child(RunTasksCommand.MOVE, "movetask", "move")
             .build();
@@ -40,7 +40,7 @@ public final class CustomAnimationCommand {
             })
             .build();
     public static final CommandSpec CUSTOM_ANIMATION = CommandSpec.builder()
-            .executor(CustomAnimationCommand::showVerion)
+            .executor(CustomAnimationCommand::showVersion)
             .child(RELOAD, "reload", "r")
             .child(RUN_ANIME, "runanime", "ra", "anime")
             .child(RUN_TASK, "runtask", "rt", "task")
@@ -53,7 +53,7 @@ public final class CustomAnimationCommand {
         }
     }
 
-    private static CommandResult showVerion(CommandSource src, CommandContext args) {
+    private static CommandResult showVersion(CommandSource src, CommandContext args) {
         check();
         src.sendMessage(Text.of("CustomAnimation v" + CustomAnimation.VERSION));
         src.sendMessage(Text.of("shouldOnline:" + SO));

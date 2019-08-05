@@ -4,6 +4,7 @@ import com.github.euonmyoji.customanimation.api.AnimeManager;
 import com.github.euonmyoji.customanimation.api.RawTextManager;
 import com.github.euonmyoji.customanimation.command.CustomAnimationCommand;
 import com.github.euonmyoji.customanimation.configuration.PluginConfig;
+import com.github.euonmyoji.customanimation.listener.LoadTaskListener;
 import com.github.euonmyoji.customanimation.manager.AnimeManagerImpl;
 import com.github.euonmyoji.customanimation.manager.PlaceHolderManager;
 import com.github.euonmyoji.customanimation.manager.RawTextManagerImpl;
@@ -72,6 +73,7 @@ public class CustomAnimation {
         Sponge.getCommandManager().register(this,
                 CustomAnimationCommand.CUSTOM_ANIMATION,
                 "customanimation", "customanime", "animation", "anime", "ca");
+        Sponge.getEventManager().registerListeners(this, new LoadTaskListener());
         if (Sponge.getPluginManager().getPlugin(PAPI_ID).isPresent()) {
             PlaceHolderManager.getInstance();
             supportedPlaceholder = true;

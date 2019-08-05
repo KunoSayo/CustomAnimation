@@ -53,7 +53,7 @@ final class RunTasksCommand {
                     } else {
                         src.sendMessage(TextUtil.toText(CustomAnimation.RAW_TEXT_MANAGER.get("customanimation.command.setPlayerTask.failed", src.getLocale())
                                 .replace("{player_name}", player.getName())));
-                    }
+                    }k
                 }
                 return CommandResult.success();
             })
