@@ -23,11 +23,16 @@ public class PluginConfig {
             Sponge.getAssetManager().getAsset(CustomAnimation.plugin, lang)
                     .ifPresent(asset -> {
                         try {
-                            asset.copyToFile(CustomAnimation.cfgDir.resolve(lang));
+                            asset.copyToFile(CustomAnimation.cfgDir.resolve(lang), false);
                         } catch (IOException e) {
                             CustomAnimation.logger.warn("copy language file error", e);
                         }
                     });
+        }
+        try {
+            CustomAnimation.RAW_TEXT_MANAGER.reload(CustomAnimation.cfgDir.resolve("lang"));
+        } catch (IOException e) {
+            CustomAnimation.logger.warn("load lang data error", e);
         }
     }
 

@@ -20,7 +20,7 @@ public class RawTextManagerImpl implements RawTextManager {
         map.clear();
         IOException e = null;
         for (Path p : Files.list(path).collect(Collectors.toList())) {
-            Locale locale = Locale.forLanguageTag(p.getFileName().toString().split(".", 2)[0].replace("_", "-"));
+            Locale locale = Locale.forLanguageTag(p.getFileName().toString().split("\\.", 2)[0].replace("_", "-"));
             try (BufferedReader reader = Files.newBufferedReader(p)) {
                 ResourceBundle res = new PropertyResourceBundle(reader);
                 map.put(locale, res);
@@ -39,6 +39,9 @@ public class RawTextManagerImpl implements RawTextManager {
 
     @Override
     public String get(String key, Locale locale) {
+        if(map.isEmpty()) {
+            return key;
+        }
         ResourceBundle res = map.get(locale);
         if (res == null) {
             if ((res = map.get(Locale.getDefault())) == null) {
