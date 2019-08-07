@@ -39,13 +39,6 @@ final class RunTasksCommand {
                     throw new CommandException(Text.of("The start point and end point is not the same world!"));
                 }
                 double offset = args.<Double>getOne("offset").orElse(0.0);
-                if (offset != 0) {
-                    if (offset % 180 == 0) {
-                        offset = Math.PI * (offset / 180);
-                    } else {
-                        offset *= Util.UNIT_RAD;
-                    }
-                }
                 for (Player player : players) {
                     if (CustomAnimation.ANIME_MANAGER.setTask(player.getUniqueId(), new StillLookTrackTask(player, start, end.getPosition(), tick, offset))) {
                         src.sendMessage(TextUtil.toText(CustomAnimation.RAW_TEXT_MANAGER.get("customanimation.command.setPlayerTask.successful", src.getLocale())

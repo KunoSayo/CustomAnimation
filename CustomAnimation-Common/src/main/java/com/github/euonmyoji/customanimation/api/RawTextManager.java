@@ -8,6 +8,8 @@ import java.util.Locale;
  * @author yinyangshi
  */
 public interface RawTextManager {
+    String[] SUPPORTED_LANGUAGE_FILES = new String[]{"lang/en_US.lang", "lang/zh_CN.lang"};
+
     /**
      * get the raw text
      * @param key the key of the text

@@ -33,17 +33,26 @@ public final class CustomAnimationCommand {
                 check();
                 src.sendMessage(Text.of("reload begin."));
                 long start = System.currentTimeMillis();
-                CustomAnimation.reload();
+                CustomAnimation.reload(src);
                 long time = System.currentTimeMillis() - start;
                 src.sendMessage(Text.of("reload successful in " + time + " ms."));
                 return CommandResult.success();
             })
             .build();
+
+    private static final CommandSpec LIST = CommandSpec.builder()
+            .permission("customanimation.admin.command.list")
+            .executor((src, args) -> {
+                return CommandResult.success();
+            })
+            .build();
+
     public static final CommandSpec CUSTOM_ANIMATION = CommandSpec.builder()
             .executor(CustomAnimationCommand::showVersion)
             .child(RELOAD, "reload", "r")
             .child(RUN_ANIME, "runanime", "ra", "anime")
             .child(RUN_TASK, "runtask", "rt", "task")
+            .child(LIST, "list")
             .build();
 
 

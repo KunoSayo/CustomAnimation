@@ -16,15 +16,17 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * @author yinyangshi
  */
-public class LoadTaskDataEvent implements Event, Cancellable, ILoadTaskDataEvent {
+public class LoadAnimeDataEvent implements Event, Cancellable, ILoadTaskDataEvent {
     private final Cause cause;
     private final CommentedConfigurationNode node;
+    private final MessageReceiver receiver;
     private boolean canceled = false;
     private IAnimeData cur;
     private Queue<Runnable> runnables = new ConcurrentLinkedQueue<>();
 
-    public LoadTaskDataEvent(MessageReceiver receiver, CommentedConfigurationNode node) {
+    public LoadAnimeDataEvent(@Nonnull MessageReceiver receiver, CommentedConfigurationNode node) {
         this.node = node.copy();
+        this.receiver = receiver;
         cause = Cause.builder().append(receiver).append(node).build(EventContext.builder().build());
     }
 
@@ -32,6 +34,12 @@ public class LoadTaskDataEvent implements Event, Cancellable, ILoadTaskDataEvent
     @Nonnull
     public Cause getCause() {
         return cause;
+    }
+
+    @Override
+    @Nonnull
+    public MessageReceiver getSource() {
+        return receiver;
     }
 
     public CommentedConfigurationNode getNode() {
@@ -50,7 +58,7 @@ public class LoadTaskDataEvent implements Event, Cancellable, ILoadTaskDataEvent
     }
 
     @Override
-    public void addFailedRunnable(Runnable r) {
+    public void onFailure(Runnable r) {
         runnables.add(r);
     }
 

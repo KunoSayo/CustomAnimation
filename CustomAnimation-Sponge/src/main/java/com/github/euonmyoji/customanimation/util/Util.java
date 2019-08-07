@@ -44,29 +44,34 @@ public class Util {
      * @return (pitch, yaw)
      */
     public static Vector2d get(Vector2d start, Vector3d location, Vector3d point, double m, double offset) {
-        Vector3d seeV = point.sub(location);
+        double dx = point.getX() - location.getX();
+        double dy = point.getY() - location.getY();
+        double dz = point.getZ() - location.getZ();
+        double xzL = Math.sqrt(dx * dx + dz * dz);
         double yaw = 0;
-        if (seeV.getX() == 0) {
-            if (seeV.getZ() == 0) {
+        double pitch;
+        if (dx == 0) {
+            if (dz == 0) {
                 if (start == null) {
                     return null;
                 } else {
-                    yaw = start.getX();
+                    yaw = start.getY();
+                    pitch = dy > 0 ? -90 : dy == 0 ? start.getY() : 90;
+                    return new Vector2d(pitch, yaw + offset);
                 }
-            } else if (seeV.getZ() < 0) {
+            } else if (dz < 0) {
                 yaw = 180;
             }
-        } else if (seeV.getZ() == 0) {
-            yaw = seeV.getX() > 0 ? -90 : 90;
+        } else if (dz == 0) {
+            yaw = dx > 0 ? -90 : 90;
         } else {
-            double xzL = seeV.toVector2(true).length();
-            yaw = -Math.asin(seeV.getX() / xzL) * UNIT_ANGLE;
-            if (seeV.getZ() < 0) {
+            yaw = -Math.asin(dx / xzL) * UNIT_ANGLE;
+            if (dz < 0) {
                 yaw += yaw > 0 ? 90 : -90;
             }
         }
-        double pitch = seeV.getY() == 0 ? 0 : -Math.asin(seeV.getY() / seeV.length());
-        Vector2d result = new Vector2d(pitch, yaw);
+        pitch = dy == 0 ? 0 : -Math.atan(dy / xzL) * UNIT_ANGLE;
+        Vector2d result = new Vector2d(pitch, yaw + offset);
         if (start == null || m == 1) {
             return result;
         } else {

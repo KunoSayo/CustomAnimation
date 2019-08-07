@@ -1,5 +1,6 @@
 package com.github.euonmyoji.customanimation.api;
 
+import com.github.euonmyoji.customanimation.api.data.IAnimeData;
 import com.github.euonmyoji.customanimation.api.tasks.IAnimeTask;
 
 import java.util.UUID;
@@ -34,4 +35,23 @@ public interface AnimeManager {
      * @return true if successful
      */
     boolean endAnime(UUID uuid);
+
+    /**
+     * get the anime by anime id
+     * @param id the id of the anime
+     * @return {@link String} the id of the anime
+     */
+    IAnimeData getAnime(String id);
+
+    /**
+     * set the anime
+     * @param data the data of the anime
+     * @return the old anime data if present.
+     */
+    IAnimeData setAnime(IAnimeData data);
+
+    /**
+     * clear all the anime data (for reload?)
+     */
+    void clearData();
 }

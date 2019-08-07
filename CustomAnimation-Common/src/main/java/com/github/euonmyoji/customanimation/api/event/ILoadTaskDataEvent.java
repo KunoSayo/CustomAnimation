@@ -26,7 +26,7 @@ public interface ILoadTaskDataEvent {
      *
      * @param r the object to run
      */
-    void addFailedRunnable(Runnable r);
+    void onFailure(Runnable r);
 
     /**
      * execute the runnable

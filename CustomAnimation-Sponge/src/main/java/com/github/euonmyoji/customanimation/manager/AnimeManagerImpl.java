@@ -1,6 +1,7 @@
 package com.github.euonmyoji.customanimation.manager;
 
 import com.github.euonmyoji.customanimation.api.AnimeManager;
+import com.github.euonmyoji.customanimation.api.data.IAnimeData;
 import com.github.euonmyoji.customanimation.api.tasks.IAnimeTask;
 import com.github.euonmyoji.customanimation.configuration.PluginConfig;
 
@@ -12,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author yinyangshi
  */
 public class AnimeManagerImpl implements AnimeManager {
+    private final ConcurrentHashMap<String, IAnimeData> animations = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<UUID, IAnimeTask> tasks = new ConcurrentHashMap<>();
 
     @Override
@@ -41,5 +43,20 @@ public class AnimeManagerImpl implements AnimeManager {
     public boolean endAnime(UUID uuid) {
         IAnimeTask task = tasks.get(uuid);
         return task != null && task.endAnime() && tasks.remove(uuid, task);
+    }
+
+    @Override
+    public IAnimeData getAnime(String id) {
+        return animations.get(id);
+    }
+
+    @Override
+    public IAnimeData setAnime(IAnimeData data) {
+        return animations.put(data.getDataID(), data);
+    }
+
+    @Override
+    public void clearData() {
+        animations.clear();
     }
 }

@@ -28,14 +28,14 @@ public class StillLookTrackTask extends AbstractLastTask {
             p.transferToWorld(start.getExtent());
         }
         if (tick == 1) {
-            Vector2d r = Util.get(null, p.getPosition(), end, 1, offset);
+            Vector2d r = Util.get(p.getHeadRotation().toVector2(false), p.getPosition(), end, 1, offset);
             if (r != null) {
                 p.setHeadRotation(r.toVector3(p.getHeadRotation().getZ()));
                 p.setRotation(r.toVector3(p.getRotation().getZ()));
             }
             startLookV = null;
         } else {
-            startLookV = Util.get(null, p.getPosition(), start.getPosition(), 1, offset);
+            startLookV = Util.get(p.getHeadRotation().toVector2(false), p.getPosition(), start.getPosition(), 1, offset);
             if (startLookV == null) {
                 throw new IllegalArgumentException("What's player's problem?");
             }
@@ -43,7 +43,10 @@ public class StillLookTrackTask extends AbstractLastTask {
             p.setRotation(startLookV.toVector3(p.getRotation().getZ()));
             nextTickV = CustomAnimation.executorService
                     .submit(() -> {
-                        endLookV = Util.get(null, p.getPosition(), end, 1, offset);
+                        endLookV = Util.get(p.getHeadRotation().toVector2(false), p.getPosition(), end, 1, offset);
+                        if(endLookV == null) {
+                            throw new IllegalArgumentException("What's player's problem?");
+                        }
                         return Util.get(startLookV, endLookV, (double) cur / tick);
                     });
         }

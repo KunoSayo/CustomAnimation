@@ -3,7 +3,7 @@ package com.github.euonmyoji.customanimation.api.tasks;
 import java.util.UUID;
 
 /**
- * the run will be invoked in tick
+ * the tick will be invoked in minecraft tick
  * the task can contain child task(s)
  * @author yinyangshi
  */

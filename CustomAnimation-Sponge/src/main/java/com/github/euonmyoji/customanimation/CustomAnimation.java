@@ -20,6 +20,7 @@ import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.scheduler.SpongeExecutorService;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.channel.MessageReceiver;
 
 import javax.inject.Inject;
 import java.nio.file.Path;
@@ -51,8 +52,8 @@ public class CustomAnimation {
         this.metrics = metrics;
     }
 
-    public static void reload() {
-        PluginConfig.reload();
+    public static void reload(MessageReceiver receiver) {
+        PluginConfig.reload(receiver);
     }
 
     @Listener
